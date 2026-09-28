@@ -16,7 +16,10 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт"
 
     def __add__(self, other):
-        return self.__price * self.quantity + other.price * other.quantity
+        if type(other) is type(self):
+            return self.__price * self.quantity + other.price * other.quantity
+        else:
+            raise TypeError
 
     @classmethod
     def new_product(cls, product_data: dict, existing_products):
@@ -82,8 +85,47 @@ class Category:
         return result
 
     def add_product(self, product):
-        self.__products.append(product)
-        Category.product_count += 1
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            raise TypeError("Неверный объект добавления")
+
+
+class Smartphone(Product):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
+    ):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: str,
+        color: str,
+    ):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
 
 
 class Iterator:

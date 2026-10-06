@@ -1,6 +1,6 @@
 import pytest
 
-from src.Classes import Category, Iterator, Product
+from src.Classes import Category, Iterator, LawnGrass, Product, Smartphone
 
 
 def test_product_init(product):
@@ -222,3 +222,90 @@ def test_get_products_for_iterator():
     category = Category("Электроника", "Техника", [product1, product2])
 
     assert category.get_products_for_Iterator() == [product1, product2]
+
+
+def test_smartphone_init(smartphone):
+    assert smartphone.efficiency == 2
+    assert smartphone.model == "Samsung S 25"
+    assert smartphone.memory == 8
+    assert smartphone.color == "red"
+    assert smartphone.name == "Смартфон"
+    assert smartphone.price == 120999.99
+    assert smartphone.quantity == 16
+    assert smartphone.description == "Хороший выбор"
+
+
+def test_lawn_grass_init(lawn_grass):
+    assert lawn_grass.name == "Газон"
+    assert lawn_grass.description == "Хороший газон"
+    assert lawn_grass.price == 500
+    assert lawn_grass.quantity == 10
+    assert lawn_grass.country == "Россия"
+    assert lawn_grass.germination_period == "10 дней"
+    assert lawn_grass.color == "Зеленый"
+
+
+def test_smartphone_addition(smartphone):
+    smartphone_2 = Smartphone(
+        "Смартфон 2",
+        "Другой смартфон",
+        100000,
+        5,
+        3,
+        "iPhone",
+        12,
+        "black",
+    )
+
+    assert smartphone + smartphone_2 == (
+        smartphone.price * smartphone.quantity
+        + smartphone_2.price * smartphone_2.quantity
+    )
+
+
+def test_lawn_grass_addition(lawn_grass):
+    lawn_grass_2 = LawnGrass(
+        "Газон 2",
+        "Другой газон",
+        300,
+        20,
+        "Германия",
+        "7 дней",
+        "Темно-зеленый",
+    )
+
+    assert lawn_grass + lawn_grass_2 == (
+        lawn_grass.price * lawn_grass.quantity
+        + lawn_grass_2.price * lawn_grass_2.quantity
+    )
+
+
+def test_different_products_addition_raises_type_error(
+    smartphone,
+    lawn_grass,
+):
+    with pytest.raises(TypeError):
+        smartphone + lawn_grass
+
+
+def test_category_add_product_accepts_smartphone(smartphone):
+    category = Category("Телефоны", "Смартфоны", [])
+
+    category.add_product(smartphone)
+
+    assert smartphone in category.get_products_for_Iterator()
+
+
+def test_category_add_product_accepts_lawn_grass(lawn_grass):
+    category = Category("Газон", "Трава", [])
+
+    category.add_product(lawn_grass)
+
+    assert lawn_grass in category.get_products_for_Iterator()
+
+
+def test_category_add_product_rejects_invalid_object():
+    category = Category("Телефоны", "Смартфоны", [])
+
+    with pytest.raises(TypeError):
+        category.add_product("не продукт")

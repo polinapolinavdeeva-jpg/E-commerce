@@ -25,6 +25,8 @@ class Product(Info_Mixin, BaseProduct):
     quantity: int
 
     def __init__(self, name, description, price, quantity):
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         self.name = name
         self.description = description
         self.__price = price
@@ -109,6 +111,16 @@ class Category:
             Category.product_count += 1
         else:
             raise TypeError("Неверный объект добавления")
+
+    def avg_price(self):
+        total_price = 0
+        for prod in self.__products:
+            total_price += prod.price
+
+        try:
+            return total_price / len(self.__products)
+        except ZeroDivisionError:
+            return 0
 
 
 class Smartphone(Product):

@@ -1,6 +1,6 @@
 import pytest
 
-from src.Classes import Category, Iterator, LawnGrass, Product, Smartphone
+from src.Classes import BaseProduct, Category, Iterator, LawnGrass, Product, Smartphone
 
 
 def test_product_init(product):
@@ -133,7 +133,7 @@ def test_price_setter_zero(capsys):
 
     captured = capsys.readouterr()
 
-    assert captured.out == "Цена не должна быть нулевая или отрицательная\n"
+    assert "Цена не должна быть нулевая или отрицательная\n" in captured.out
     assert product.price == 100
 
 
@@ -144,7 +144,7 @@ def test_price_setter_negative(capsys):
 
     captured = capsys.readouterr()
 
-    assert captured.out == "Цена не должна быть нулевая или отрицательная\n"
+    assert "Цена не должна быть нулевая или отрицательная\n" in captured.out
     assert product.price == 100
 
 
@@ -236,12 +236,12 @@ def test_smartphone_init(smartphone):
 
 
 def test_lawn_grass_init(lawn_grass):
-    assert lawn_grass.name == "Газон"
-    assert lawn_grass.description == "Хороший газон"
+    assert lawn_grass.name == "Газонная трава"
+    assert lawn_grass.description == "Для красивого газона"
     assert lawn_grass.price == 500
     assert lawn_grass.quantity == 10
     assert lawn_grass.country == "Россия"
-    assert lawn_grass.germination_period == "10 дней"
+    assert lawn_grass.germination_period == "14 дней"
     assert lawn_grass.color == "Зеленый"
 
 
@@ -309,3 +309,30 @@ def test_category_add_product_rejects_invalid_object():
 
     with pytest.raises(TypeError):
         category.add_product("не продукт")
+
+
+def test_base_product_is_abstract():
+    with pytest.raises(TypeError):
+        BaseProduct("Товар", "Описание", 100, 5)
+
+
+def test_product_repr(capsys):
+    product = Product("Мопс", "Красивый", 100, 2)
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "Product('Мопс', 'Красивый', 100, 2)\n"
+
+
+def test_smartphone_repr(capsys, smartphone):
+    captured = capsys.readouterr()
+
+    assert captured.out == ("Smartphone('Смартфон', 'Хороший выбор', 120999.99, 16)\n")
+
+
+def test_lawn_grass_repr(capsys, lawn_grass):
+    captured = capsys.readouterr()
+
+    assert captured.out == (
+        "LawnGrass('Газонная трава', 'Для красивого газона', 500, 10)\n"
+    )

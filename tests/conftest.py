@@ -40,3 +40,17 @@ def lawn_grass():
         "Зеленый",
     )
     return lawn_grass
+
+
+@pytest.fixture
+def lawn_grass():
+    lawn_grass = LawnGrass(
+        "Газонная трава",
+        "Для красивого газона",
+        500,
+        10,
+        "Россия",
+        "14 дней",
+        "Зеленый",
+    )
+    return lawn_grass

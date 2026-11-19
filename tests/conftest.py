@@ -29,7 +29,7 @@ def smartphone():
 
 
 @pytest.fixture
-def lawn_grass():
+def lawn_grass_alt():
     lawn_grass = LawnGrass(
         "Газон",
         "Хороший газон",

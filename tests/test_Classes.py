@@ -1,3 +1,5 @@
+from unittest import result
+
 import pytest
 
 from src.Classes import BaseProduct, Category, Iterator, LawnGrass, Product, Smartphone
@@ -336,3 +338,19 @@ def test_lawn_grass_repr(capsys, lawn_grass):
     assert captured.out == (
         "LawnGrass('Газонная трава', 'Для красивого газона', 500, 10)\n"
     )
+
+
+def test_product_zero_quantity():
+    with pytest.raises(ValueError) as e:
+        Product("Товар", "Хороший", 100, 0)
+    assert str(e.value) == ("Товар с нулевым количеством не может быть добавлен")
+
+
+def test_avg_price(category):
+    result = category.avg_price()
+    assert result == 120099.99333333333
+
+
+def test_avg_price_empty_category():
+    empty_category = Category("Пустая категория", "Нет товаров", [])
+    assert empty_category.avg_price() == 0
